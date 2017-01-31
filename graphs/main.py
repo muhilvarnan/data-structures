@@ -48,13 +48,13 @@ class GraphHolder(object):
         self.vertices[start].add_adjacent(self.vertices[end], weight)
 
         self.vertices[end].add_adjacent(self.vertices[start], weight)
+
 if __name__ == '__main__':
 
     graphHolder = GraphHolder()
     graphHolder.add_vertex('a')
     graphHolder.add_vertex('b')
     graphHolder.add_vertex('c')
-
     graphHolder.add_edge('a', 'b', 10)
     graphHolder.add_edge('b', 'c', 10)
     for vertex in graphHolder:
