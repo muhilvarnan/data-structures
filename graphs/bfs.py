@@ -77,6 +77,16 @@ class GraphHolder(object):
 				queue.extend(diff)
 		return visited
 
+	def bfs_paths(self, start, goal):
+	    queue = [(start, [start])]
+	    while queue:
+	        (vertex, path) = queue.pop(0)
+	        for next in set(self.vertex_list[vertex].get_connections()) - set(path):
+	            if next == goal:
+	                yield path + [next]
+	            else:
+	                queue.append((next, path + [next]))
+
 if __name__ == "__main__":
 	graphHolder = GraphHolder()
 	graphHolder.add_vertex("a")
@@ -100,3 +110,4 @@ if __name__ == "__main__":
 	graphHolder.add_edge("g", "h", 3)
 
 	print graphHolder.bfs('a')
+	print list(graphHolder.bfs_paths("a", "f"))
