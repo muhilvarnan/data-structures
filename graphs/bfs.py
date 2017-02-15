@@ -67,18 +67,14 @@ class GraphHolder(object):
 		self.vertex_list[end].add_adjacent(self.vertex_list[start], weight)
 
 	def bfs(self, start):
-		print self.vertex_list['s'].get_connections()
 		visited, queue = [], [start]
 		while queue:
 			vertex = queue.pop(0)
 			if vertex not in visited:
 				visited.append(vertex)
-				print vertex
-				print self.vertex_list['s'].get_connections()
-				conn = self.vertex_list['s'].get_connections()
+				conn = self.vertex_list[vertex].get_connections()
 				diff = [x for x in conn if x not in set(visited)]
 				queue.extend(diff)
-				print queue
 		return visited
 
 if __name__ == "__main__":
