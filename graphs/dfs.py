@@ -52,7 +52,7 @@ class GraphHolder(object):
 
         self.vertices[end].add_adjacent(self.vertices[start], weight)
 
-    def dfs(self, start):
+    def dfs_old(self, start):
         """
         """
         visited , stack = set(), [start]
@@ -63,7 +63,17 @@ class GraphHolder(object):
                 visited.add(vertex.get_id())
                 stack.extend(set(vertex.get_connections()) - visited)
         return visited
-        
+
+    def dfs(self, start, visited=None):
+        if visited == None:
+            visited = []
+        visited.append(start)
+        diff = [x for x in self.vertices[start].get_connections() if x not in set(visited)]
+        for next in diff:
+            self.dfs(next, visited)
+        return visited
+
+
 if __name__ == '__main__':
 
     graphHolder = GraphHolder()
@@ -87,4 +97,4 @@ if __name__ == '__main__':
     for vertex in graphHolder:
             print graphHolder.vertices[vertex.get_id()].get_id()
 
-    print graphHolder.dfs('a')
+    print graphHolder.dfs('c')
