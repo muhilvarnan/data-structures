@@ -67,12 +67,28 @@ class GraphHolder(object):
     def dfs(self, start, visited=None):
         if visited == None:
             visited = []
+        #print start
         visited.append(start)
-        diff = [x for x in self.vertices[start].get_connections() if x not in set(visited)]
+        #print visited
+        conn = self.vertices[start].get_connections()
+        diff = [x for x in conn if x not in set(visited)]
+        #print diff
         for next in diff:
             self.dfs(next, visited)
         return visited
 
+    def dfs_path(self, start, goal):
+        stack = [(start, [start])]
+        print stack
+        while stack:
+            (vertex, path) = stack.pop()
+            conn = self.vertices[vertex].get_connections()
+            diff = [x for x in conn if x not in set(path)]
+            for next in diff:
+                if next == goal:
+                    yield path + [next]
+                else:
+                    stack.append((next, path + [next]))
 
 if __name__ == '__main__':
 
@@ -91,10 +107,11 @@ if __name__ == '__main__':
     graphHolder.add_edge('c', 'f', 0)
     graphHolder.add_edge('e', 'f', 0)
 
-    for vertex in graphHolder:
+    """for vertex in graphHolder:
         for w in vertex.get_connections():
             print '%s %s %d' % (vertex.get_id(), graphHolder.vertices[w].get_id(), vertex.get_weight(graphHolder.vertices[w].get_id()))
     for vertex in graphHolder:
-            print graphHolder.vertices[vertex.get_id()].get_id()
+            print graphHolder.vertices[vertex.get_id()].get_id()"""
 
     print graphHolder.dfs('c')
+    print list(graphHolder.dfs_path('a', 'f'))
