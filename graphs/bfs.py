@@ -10,6 +10,8 @@ graphHolder = {
 }
 
 Depth first search algorithm
+
+
 """
 
 class Vertex(object):
@@ -77,15 +79,23 @@ class GraphHolder(object):
 				queue.extend(diff)
 		return visited
 
-	def bfs_paths(self, start, goal):
-	    queue = [(start, [start])]
-	    while queue:
-	        (vertex, path) = queue.pop(0)
-	        for next in set(self.vertex_list[vertex].get_connections()) - set(path):
-	            if next == goal:
-	                yield path + [next]
-	            else:
-	                queue.append((next, path + [next]))
+	def bfs_path(self, start, goal):
+		queue = [(start, [start])]
+		while queue:
+			(vertex, path) = queue.pop(0)
+			conn = self.vertex_list[vertex].get_connections()
+			diff = [x for x in conn if x not in set(path)]
+			for next in diff:
+				if next == goal:
+					yield path + [next]
+				else:
+					queue.append((next, path + [next]))
+
+	def shortest_path(self, start, goal):
+	    try:
+	        print next(self.bfs_path(start, goal))
+	    except StopIteration:
+	        return None
 
 if __name__ == "__main__":
 	graphHolder = GraphHolder()
@@ -95,19 +105,15 @@ if __name__ == "__main__":
 	graphHolder.add_vertex("d")
 	graphHolder.add_vertex("e")
 	graphHolder.add_vertex("f")
-	graphHolder.add_vertex("g")
-	graphHolder.add_vertex("h")
-	graphHolder.add_vertex("s")
 
 	graphHolder.add_edge("a", "b", 3)
-	graphHolder.add_edge("a", "s", 3)
-	graphHolder.add_edge("s", "c", 3)
-	graphHolder.add_edge("s", "g", 3)
-	graphHolder.add_edge("c", "d", 3)
-	graphHolder.add_edge("c", "e", 3)
+	graphHolder.add_edge("a", "c", 3)
+	graphHolder.add_edge("b", "d", 3)
+	graphHolder.add_edge("b", "e", 3)
 	graphHolder.add_edge("c", "f", 3)
-	graphHolder.add_edge("e", "h", 3)
-	graphHolder.add_edge("g", "h", 3)
+	graphHolder.add_edge("e", "f", 3)
 
 	print graphHolder.bfs('a')
-	print list(graphHolder.bfs_paths("a", "f"))
+	print list(graphHolder.bfs_path('a', 'f'))
+	print graphHolder.shortest_path('a', 'f')
+
